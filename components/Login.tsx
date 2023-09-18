@@ -7,11 +7,16 @@ export default function LoginForm() {
   const router = useRouter()
   const supabase = createClientComponentClient()
 
+  const handleSignOut = async () => {
+    await supabase.auth.signOut()
+    router.refresh()
+  }
+
   const handleSignUpFacebook = async () => {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'facebook',
       options: {
-        redirectTo: process.env.NEXT_PUBLIC_URL,
+        redirectTo: 'http://localhost:3000/auth/callback'
       },
     })
     router.refresh()
@@ -21,6 +26,9 @@ export default function LoginForm() {
     <form>
       <button type='button' onClick={handleSignUpFacebook}>
         Log in with facebook
+      </button>
+      <button type='button' onClick={handleSignOut}>
+        Logout
       </button>
     </form>
   )
